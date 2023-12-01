@@ -2,38 +2,84 @@
 
 Welcome,
 
-This is the Code Institute student template for Codeanywhere. If you are using Gitpod then you need [this template](https://github.com/Code-Institute-Org/gitpod-full-template) instead.  We have preinstalled all of the tools you need to get started. It's perfectly ok to use this template as the basis for your project submissions.
+This is the Positive Social Network API, a project for the Code Institute Full Stack Software Development Diploma.
 
-You can safely delete this README.md file, or change it for your own project. Please do read it at least once, though! It contains some important information about Codeanywhere and the extensions we use. Some of this information has been updated since the video content was created. The last update to this file was: **August 30th, 2023**
+## Introduction
 
-## Codeanywhere Reminders
+This project is a Django API for the Positive Social Network, a social network for people to share only positive reviews of restaurants, bars, hotels, etc.
+Why only positive reviews? Because we want to create a positive environment for people to share their experiences and recommendations. We believe that there are already too many negative reviews on the internet, and we want to change that.
 
-To run a frontend (HTML, CSS, Javascript only) application in Codeanywhere, in the terminal, type:
+In my experience as a movie and music reviewer, people feel also attracted to check the negatively scored movies. We humans are curious by nature, and we want to know why a movie is so bad, or why a restaurant is so bad. We even want to contradict others opinions, so we also want to prove people wrong. This is why I believe that a social network with only positive reviews will be a success. Not only because really good places will have more notoriety, but also because people won't have information about bad places, so these places will need to strive harder to at least, have presence in the Internet.
 
-`python3 -m http.server`
+Also, when one writes a negative review, it is very easy to get carried away and write a very long one, losing even scope. But, when one writes a positive review, needs to really focus on explaining why the place is so good, and this is a good exercise for the brain and also, to hihglight why the place is worth visiting.
 
-A button should appear to click: _Open Preview_ or _Open Browser_.
+## Basic configuration
 
-To run a frontend (HTML, CSS, Javascript only) application in Codeanywhere with no-cache, you can use this alias for `python3 -m http.server`.
+Start by installing Django (in this case, I used the latest version to date 4.2.7)
 
-`http_server`
+```bash
+pip3 install django
+```
 
-To run a backend Python file, type `python3 app.py`, if your Python file is named `app.py` of course.
+Then, create a new project
 
-A button should appear to click: _Open Preview_ or _Open Browser_.
+```bash
+django-admin startproject <project_name> .
+```
 
-In Codeanywhere you have superuser security privileges by default. Therefore you do not need to use the `sudo` (superuser do) command in the bash terminal in any of the lessons.
+My project name is positive_api, as I will be creating an API for the Positive Social Network.
 
-To log into the Heroku toolbelt CLI:
+NOTE: The dot at the end of the command is to create the project in the current directory. Please, do not forget it (I know why I am saying this ;-) ).
 
-1. Log in to your Heroku account and go to _Account Settings_ in the menu under your avatar.
-2. Scroll down to the _API Key_ and click _Reveal_
-3. Copy the key
-4. In Codeanywhere, from the terminal, run `heroku_config`
-5. Paste in your API key when asked
+We are going to use CLOUDINARY to store the images of the users. So, we need to install the cloudinary package
 
-You can now use the `heroku` CLI program - try running `heroku apps` to confirm it works. This API key is unique and private to you so do not share it. If you accidentally make it public then you can create a new one with _Regenerate API Key_.
+```bash
+pip install django-cloudinary-storage
+```
 
----
+Then, we need to install also [Pillow](https://pypi.org/project/Pillow/), which is a Python Imaging Library
 
-Happy coding!
+```bash
+pip install Pillow
+```
+
+But, I know that when you are reading (or even watching tutorials), you are to install and do things that you don't know what they are for. So, check this [![YouTube video](https://img.youtube.com/vi/6Qs3wObeWwc/0.jpg)](https://www.youtube.com/watch?v=6Qs3wObeWwc) that will tell you what is Pillow and why we need it.
+
+Add the Cloudinary storage to the INSTALLED_APPS in the settings.py file (following the order below)
+
+```python
+    ...
+    'django.contrib.messages',
+    'cloudinary_storage',
+    'django.contrib.staticfiles',
+    'cloudinary',
+    ...
+```
+
+Now, as we don't want to make the variables and keys of our accounts public, we need to create a .env file in the root of our project.
+
+```python
+import os
+os.environ['CLOUDINARY_URL'] = 'cloudinary://YOUR_CLOUDINARY_URL'
+```
+
+Then, we need to add the following lines to the settings.py file
+
+```python
+from pathlib import Path
+import os
+
+if os.path.exists('env.py'):
+    import env
+
+# Cloudinary
+CLOUDINARY_STORAGE = {
+    'CLOUDINARY_URL': os.environ.get('CLOUDINARY_URL')
+}
+
+MEDIA_URL = '/media/'
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+```
+The MEDIA_URL is the URL where the images will be stored by Django. In this case, we will use the default one, which is /media/
+
+
