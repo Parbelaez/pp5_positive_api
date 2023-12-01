@@ -159,3 +159,35 @@ Make migrations and migrate
 Remember to add the Profile to your admin panel, and a superuser to be able to log in.
 All this was covered in my previous project, [The WC](https://github.com/Parbelaez/ci_fsd_pp4_the_wc/blob/main/README.md).
 
+Now we have a Profile working model with images.
+
+![Profile model](./README_images/profiles_anim.gif)
+
+#### Serializers
+
+After creating the views and the urls, we will recieve the folowing error:
+
+![JSON Error](./README_images/json_error.png)
+
+The Back-End and Front-End need to share data between each other, but up to now, Django is retutning everything in html format and the FE will receive only JSON data. Serializers create this translation, from one format to the other. Therefore, we need to create the serializers for the profiles app.
+
+Django has a built-in serializer, but we will use the [Django REST Framework](https://www.django-rest-framework.org/), which is a powerful and flexible toolkit for building Web APIs.
+
+```bash
+pip install djangorestframework
+```
+
+Then, we need to add the following lines to the settings.py file
+
+```Python
+INSTALLED_APPS = [
+    ...
+    'rest_framework',
+    ...
+]
+```
+Then we need to create a serializers.py file in the profiles app.
+(Check the serializers.py file in the profiles app and how it was used in the views.py file)
+
+After this, we will be able to see the JSON data in the browser from the newly created view.
+![Profiles Serializer](./README_images/profiles_serializer.gif)
