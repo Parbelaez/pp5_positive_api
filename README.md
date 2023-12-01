@@ -82,4 +82,84 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 ```
 The MEDIA_URL is the URL where the images will be stored by Django. In this case, we will use the default one, which is /media/
 
+## Creating the apps
+
+Now, we need to create the apps that we will use in our project. In this case, we will create the following apps:
+
+- profiles
+- posts
+- comments
+- likes
+
+To create an app, we need to run the following command
+
+```bash
+python3 manage.py startapp <app_name>
+```
+
+Then, we need to add the app to the INSTALLED_APPS in the settings.py file
+
+```python
+    ...
+    'django.contrib.messages',
+    'cloudinary_storage',
+    'django.contrib.staticfiles',
+    'cloudinary',
+    'profiles',
+    'posts',
+    'comments',
+    'likes',
+    ...
+```
+
+### Profiles app
+
+This app will be used to manage the users of the Positive Social Network. We will use the default Django User model, but we will add some extra fields to it.
+
+Then, we need to add the app to the INSTALLED_APPS in the settings.py file
+
+```python
+    ...
+    'django.contrib.messages',
+    'cloudinary_storage',
+    'django.contrib.staticfiles',
+    'cloudinary',
+    'profiles',
+    'posts',
+    'comments',
+    'likes',
+    ...
+```
+
+The profiles will have the following fields:
+
+- owner
+- name
+- created_at
+- updated_at
+- content
+- image
+
+After creating the model, we need to create a signals.py file in the profiles app.
+
+Signals are just pieces of code that are executed when a certain action is performed or there is an event. In this case, we want to create a profile for each user that is created.
+
+```python
+def create_profile(sender, instance, created, **kwargs):
+    if created:
+        Profile.objects.create(owner=instance)
+
+post_save.connect(create_profile, sender=User)
+```
+
+Basically, we are saying that when a user is created, we want to create a profile for that user. Remember, a user is not the same as a profile. A user is the one that logs in, and a profile is the one that is shown in the social network.
+
+Make migrations and migrate
+
+Remember to add the Profile to your admin panel, and a superuser to be able to log in.
+All this was covered in my previous project, [The WC](https://github.com/Parbelaez/ci_fsd_pp4_the_wc/blob/main/README.md).
+
+Then, we need to import the signals in the apps.py file
+
+```python
 
