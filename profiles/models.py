@@ -9,7 +9,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=100)
     content = models.TextField()
     image = models.ImageField(
-        upload_to='images/',
+        upload_to='positive/profile_pictures/',
         default='../default_profile_zlhcpb'
         )
 

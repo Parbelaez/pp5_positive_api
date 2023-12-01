@@ -159,7 +159,3 @@ Make migrations and migrate
 Remember to add the Profile to your admin panel, and a superuser to be able to log in.
 All this was covered in my previous project, [The WC](https://github.com/Parbelaez/ci_fsd_pp4_the_wc/blob/main/README.md).
 
-Then, we need to import the signals in the apps.py file
-
-```python
-
