@@ -3,6 +3,10 @@ from .models import Profile
 
 
 class ProfileSerializer(serializers.ModelSerializer):
+    # The owner.username dot notation is used to access the username field of
+    # the owner relationship
+    # This can be better understood by looking at the Entities Relationship
+    # Diagram in the readme file.
     owner = serializers.ReadOnlyField(source='owner.username')
     
     class Meta: 

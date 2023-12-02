@@ -1,4 +1,4 @@
-![CI logo](https://codeinstitute.s3.amazonaws.com/fullstack/ci_logo_small.png)
+![Positive logo](./README_images/cover.jpg)
 
 Welcome,
 
@@ -111,6 +111,10 @@ Then, we need to add the app to the INSTALLED_APPS in the settings.py file
     'likes',
     ...
 ```
+
+## Entities Relationship Diagram (ERD)
+
+
 
 ### Profiles app
 
