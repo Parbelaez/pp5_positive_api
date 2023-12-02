@@ -195,3 +195,19 @@ Then we need to create a serializers.py file in the profiles app.
 
 After this, we will be able to see the JSON data in the browser from the newly created view.
 ![Profiles Serializer](./README_images/profiles_serializer.gif)
+
+With the serializer now created, we can add all CRUD functionalities to the profiles app.
+
+Please, check the code, as it is commented and it is very easy to understand.
+
+Feel free to read also the TESTING.md file, where I explain how to test the API, and you can also find videos of all functionalities.
+
+### Permissions
+
+Now, we need to add permissions to the profiles app. Permissions are rules that define who can access what in our API. For example, we don't want that a user can delete or edit another user's profile.
+
+For that, we need to create a permissions.py file in the main folder (positive_api), because this permissions will be used on different apps around the API.
+
+Please, check the permissions.py file in the main folder.
+
+![Permissions](./README_images/profile_permissions.gif)

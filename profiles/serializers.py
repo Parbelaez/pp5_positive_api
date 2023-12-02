@@ -8,6 +8,10 @@ class ProfileSerializer(serializers.ModelSerializer):
     # This can be better understood by looking at the Entities Relationship
     # Diagram in the readme file.
     owner = serializers.ReadOnlyField(source='owner.username')
+    is_owner = serializers.SerializerMethodField()
+
+    def get_is_owner(self, obj):
+        return self.context['request'].user == obj.owner
     
     class Meta: 
         model = Profile
@@ -21,4 +25,5 @@ class ProfileSerializer(serializers.ModelSerializer):
             'name',
             'content',
             'image',
+            'is_owner',
         ]
