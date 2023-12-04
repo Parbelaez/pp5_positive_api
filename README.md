@@ -43,7 +43,9 @@ Then, we need to install also [Pillow](https://pypi.org/project/Pillow/), which 
 pip install Pillow
 ```
 
-But, I know that when you are reading (or even watching tutorials), you are to install and do things that you don't know what they are for. So, check this [![YouTube video](https://img.youtube.com/vi/6Qs3wObeWwc/0.jpg)](https://www.youtube.com/watch?v=6Qs3wObeWwc) that will tell you what is Pillow and why we need it.
+But, I know that when you are reading (or even watching tutorials), you are to install and do things that you don't know what they are for. So, check this YouTube video that will tell you what is Pillow and why we need it.
+
+[![YouTube video](https://img.youtube.com/vi/6Qs3wObeWwc/0.jpg)](https://www.youtube.com/watch?v=6Qs3wObeWwc)
 
 Add the Cloudinary storage to the INSTALLED_APPS in the settings.py file (following the order below)
 
