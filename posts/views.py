@@ -1,5 +1,5 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import status
+from rest_framework import status, permissions
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from .models import Post
@@ -8,6 +8,8 @@ from positive_api.permissions import IsOwnerOrReadOnly
 
 
 class PostList(APIView):
+    serializer_class = PostSerializer
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     # We use get to retrieve all the posts
     def get(self, request):
         # get all the posts
@@ -30,7 +32,7 @@ class PostList(APIView):
             )
         # if the serializer is valid, we save it
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(owner=request.user)
             # and return the serialized data
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         # if the serializer is not valid, return a 400 error

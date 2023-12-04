@@ -211,3 +211,62 @@ For that, we need to create a permissions.py file in the main folder (positive_a
 Please, check the permissions.py file in the main folder.
 
 ![Permissions](./README_images/profile_permissions.gif)
+
+
+### Posts app
+
+This app will be used to manage the posts of the Positive Social Network. We will use the default Django User model, but we will add some extra fields to it.
+
+The posts will have the following fields:
+
+- owner
+- title
+- created_at
+- updated_at
+- visit_date
+- content
+- image
+- recomendation
+
+The model and serializer are following the same logic as the profiles app, so I will not explain it again.
+
+But, we added  a Image Filter and Validation. This is because we want to make sure that the image that is uploaded is a valid image.
+
+The image filter is defined in the models.py file
+
+```python
+image_filter = models.CharField(
+        max_length=32,
+        choices=image_filter_choices,
+        default='normal'
+        )
+```
+
+And the validation is defined in the serializers.py file
+
+```python
+def validate_image(self, value):
+        # We check if the image is bigger than 2MB
+        if value.size > 1024 * 1024 * 2:
+            raise serializers.ValidationError(
+                'The maximum file size that can be uploaded is 2MB'
+                )
+        # We validate if the image width is bigger than 4096px
+        if value.width > 4096:
+            raise serializers.ValidationError(
+                'The maximum width allowed is 4096px'
+                )
+        # We validate if the image height is bigger than 4096px
+        if value.height > 4096:
+            raise serializers.ValidationError(
+                'The maximum height allowed is 4096px'
+                )
+        # We validate if the image format is not supported
+        if value.content_type not in ['image/jpeg', 'image/png']:
+            raise serializers.ValidationError(
+                'The allowed formats are JPEG and PNG'
+                )
+        # We return the value if it is compliant with our requirements
+        return value
+````
+``
