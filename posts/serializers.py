@@ -18,12 +18,12 @@ class PostSerializer(serializers.ModelSerializer):
                 'The maximum file size that can be uploaded is 2MB'
                 )
         # We validate if the image width is bigger than 4096px
-        if value.width > 4096:
+        if value.image.width > 4096:
             raise serializers.ValidationError(
                 'The maximum width allowed is 4096px'
                 )
         # We validate if the image height is bigger than 4096px
-        if value.height > 4096:
+        if value.image.height > 4096:
             raise serializers.ValidationError(
                 'The maximum height allowed is 4096px'
                 )

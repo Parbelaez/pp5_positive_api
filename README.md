@@ -268,5 +268,72 @@ def validate_image(self, value):
                 )
         # We return the value if it is compliant with our requirements
         return value
-````
-``
+```
+
+### Likes app
+
+This app will be used to manage the likes of the Positive Social Network.
+
+In this case, we will use a like system similar to the new (as of 2023) from Netflix, with three clasess of like:
+
+- Top: a cannot miss place
+- Like: good and agree with the post
+- Dislike: do not agree with the post
+
+Remember that every single post with be a positive review, so the dislike is not related to the post itself, but with the appreciation of the user regarding the reviewed place.
+
+The likes will have the following fields:
+
+- owner
+- post
+- created_at
+- like_type
+
+From the likes model we need a new condition, and is that every post can be liked just once by the same user. So, we need to add a unique_together condition to the Meta class of the model.
+
+```python
+class Meta:
+        unique_together = ('user', 'post')
+```
+
+And, in the serializer, we need to add the following try/except block to the create method
+
+```python
+def create(self, validated_data):
+        try:
+            # super() is used to call the create method of the parent class
+            # in this case, ModelSerializer
+            return super().create(validated_data)
+        except IntegrityError as err:
+            raise serializers.ValidationError({
+                'detail': 'It seems like you already liked this post'
+            }) from err
+```
+
+Now comes an interesting part. In the previous views, we have always serialized, deseriaizaed, create, update and delete repitively. But, Django offers a shortcut to do this with ![generic views](https://www.django-rest-framework.org/api-guide/generic-views/#attributes/).
+
+So, we will create a new file called views.py in the likes app, and we will import the generic from DRF.
+
+```python
+from rest_framework import generics
+```
+
+Please, refer to the views.py file in the likes app to see how the generic views are used.
+
+But, basically, the most important parts are these:
+
+```python
+class LikeList(generics.ListCreateAPIView):
+```
+
+ListCreateAPIView is a generic view that provides GET (list) and POST method handlers.
+
+```python
+class LikeDetail(generics.RetrieveUpdateDestroyAPIView):
+```
+
+RetrieveUpdateDestroyAPIView is a generic view that provides GET (retrieve), PUT (update), PATCH (partial update) and DELETE method handlers.
+
+Therefore, there is no need to create the methods as before.
+
+***NOTE:*** the previous views will be left as they are (no refactoring), because they are intended to be a sample of the different ways to create views.
