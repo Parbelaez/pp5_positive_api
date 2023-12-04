@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'rest_framework',
 
     # My apps
-    'profiles'
+    'profiles',
+    'posts',
     
 ]
 
