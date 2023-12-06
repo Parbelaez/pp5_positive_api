@@ -395,7 +395,7 @@ def create(self, validated_data):
             }) from err
 ```
 
-Now comes an interesting part. In the previous views, we have always serialized, deseriaizaed, create, update and delete repitively. But, Django offers a shortcut to do this with ![generic views](https://www.django-rest-framework.org/api-guide/generic-views/#attributes/).
+Now comes an interesting part. In the previous views, we have always serialized, deserialized, create, update and delete repitively. But, Django offers a shortcut to do this with ![generic views](https://www.django-rest-framework.org/api-guide/generic-views/#attributes/).
 
 So, we will create a new file called views.py in the likes app, and we will import the generic from DRF.
 
@@ -421,15 +421,9 @@ RetrieveUpdateDestroyAPIView is a generic view that provides GET (retrieve), PUT
 
 Therefore, there is no need to create the methods as before.
 
-***NOTE:*** the previous views will be left as they are (no refactoring), because they are intended to be a sample of the different ways to create views.
+***NOTE 1:*** the previous views will be left as they are (no refactoring), because they are intended to be a sample of the different ways to create views.
 
-**IMPORTANT NOTE:** during the creation of some views, it was needed to delete the DB and create it again, because the get_or_create method was not working as expected. So, it was needed to install the django-extensions package, and run the following command:
-
-```bash
-python3 manage.py reset_db
-```
-
-After this, it is needed to run all migrations again.
+***NOTE 2:*** the places view was created after the posts and likes views, therefore, it was not stated in this README.md that we used generics.
 
 One last step needed: we need to see what posts has each user liked, and what type of like has been used (if liked). And, this is something that we will handle in the posts serializer.
 
@@ -468,3 +462,13 @@ fields = (
     'like_type'
 )
 ```
+
+---
+**IMPORTANT:** during the creation of some views, it was needed to delete the DB and create it again, because the get_or_create method was not working as expected. So, it was needed to install the django-extensions package, and run the following command:
+
+```bash
+python3 manage.py reset_db
+```
+After this, it is needed to run all migrations again.
+
+---

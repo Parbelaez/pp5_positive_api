@@ -9,6 +9,8 @@ class ProfileSerializer(serializers.ModelSerializer):
     # Diagram in the readme file.
     owner = serializers.ReadOnlyField(source='owner.username')
     is_owner = serializers.SerializerMethodField()
+    num_posts = serializers.ReadOnlyField()
+    num_places = serializers.ReadOnlyField()
 
     def get_is_owner(self, obj):
         return self.context['request'].user == obj.owner
@@ -26,4 +28,6 @@ class ProfileSerializer(serializers.ModelSerializer):
             'content',
             'image',
             'is_owner',
+            'num_posts',
+            'num_places'
         ]
