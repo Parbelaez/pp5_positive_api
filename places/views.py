@@ -10,6 +10,10 @@ class PlaceList(generics.ListCreateAPIView):
     serializer_class = PlaceSerializer
     queryset = Place.objects.all()
 
+    # We override the perform_create method to be able to use the get_or_create
+    # method from the model. This way we can check if a place with the same
+    # name and city already exists and if it does, we don't create a new one
+    # but we return the existing one
     def perform_create(self, serializer):
         place, created = Place.objects.get_or_create(
             place_name=self.request.data.get('place_name'), 
@@ -20,7 +24,6 @@ class PlaceList(generics.ListCreateAPIView):
             raise ValidationError(
                 "A place with this name and city already exists."
                 )
-        serializer.save(owner=self.request.user)
 
 class PlaceDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly]

@@ -37,10 +37,8 @@ class Place(models.Model):
     
     class Meta:
         ordering = ['-created_at']
-        # constraints = [
-        #     models.UniqueConstraint(fields=['place_name', 'city'], name='unique_place_name_city')
-        # ]
-        # unique_together = ['city', 'place_name',]
+        # No unique_together nor unique_constraints because we are using the
+        # get_or_create method in the PlaceList view
     
     def __str__(self):
-        return f'{self.id} {self.place_name}'
+        return f'{self.place_name}'
