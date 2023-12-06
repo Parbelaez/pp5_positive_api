@@ -10,9 +10,11 @@ class PlaceList(generics.ListCreateAPIView):
     serializer_class = PlaceSerializer
     queryset = Place.objects.all().order_by('-created_at')
 
+    # We add the filter and ordering backends to be able to filter and order
+    # the places by name and city
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
-    ordering_fields = ['Place.place_name', 'Place.city']
-    search_fields = ['Place.place_name', 'Place.city']
+    ordering_fields = ['place_name', 'city']
+    search_fields = ['place_name', 'city']
 
     # We override the perform_create method to be able to use the get_or_create
     # method from the model. This way we can check if a place with the same

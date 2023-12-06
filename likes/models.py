@@ -15,10 +15,10 @@ class Likes(models.Model):
         ('dislike', 'Dislike')
     ]
     
-    owner = models.ForeignKey(User, on_delete=models.CASCADE)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='user_likes')
     post = models.ForeignKey(
         Post,
-        related_name='likes',
+        related_name='post_likes',
         on_delete=models.CASCADE,
         )
     created_at = models.DateTimeField(auto_now_add=True)
