@@ -4,6 +4,30 @@ Welcome,
 
 This is the Positive Social Network API, a project for the Code Institute Full Stack Software Development Diploma.
 
+[View Postive on Heroku](https://thewcwebpage-83a6428384c3.herokuapp.com)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/parbelaez/pp5_positive_api?color=red)
+![GitHub contributors](https://img.shields.io/github/contributors/parbelaez/pp5_positive_api?color=orange)
+![GitHub language count](https://img.shields.io/github/languages/count/parbelaez/pp5_positive_api?color=yellow)
+![GitHub top language](https://img.shields.io/github/languages/top/parbelaez/pp5_positive_api?color=green)
+![W3C Validation](https://img.shields.io/w3c-validation/html?color=blueviolet&targetUrl=https://thewcwebpage-83a6428384c3.herokuapp.com)
+
+---
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Basic configuration](#basic-configuration)
+- [Creating the apps](#creating-the-apps)
+- [Entities Relationship Diagram (ERD)](#entities-relationship-diagram-erd)
+- [Profiles app](#profiles-app)
+  - [Serializers](#serializers)
+  - [Permissions](#permissions)
+- [Posts app](#posts-app)
+- [Likes app](#likes-app)
+- [Places app](#places-app)
+
+
 ## Introduction
 
 This project is a Django API for the Positive Social Network, a social network for people to share only positive reviews of restaurants, bars, hotels, etc.
@@ -204,7 +228,7 @@ Please, check the code, as it is commented and it is very easy to understand.
 
 Feel free to read also the TESTING.md file, where I explain how to test the API, and you can also find videos of all functionalities.
 
-### Permissions
+#### Permissions
 
 Now, we need to add permissions to the profiles app. Permissions are rules that define who can access what in our API. For example, we don't want that a user can delete or edit another user's profile.
 
@@ -339,3 +363,61 @@ RetrieveUpdateDestroyAPIView is a generic view that provides GET (retrieve), PUT
 Therefore, there is no need to create the methods as before.
 
 ***NOTE:*** the previous views will be left as they are (no refactoring), because they are intended to be a sample of the different ways to create views.
+
+### Places app
+
+This app will be used to manage the places of the Positive Social Network.
+The list of categories will be the following:
+
+- Restaurant
+- Bar
+- Hotel
+- Museum
+- Park
+- Beach
+- Other
+
+The places will have the following fields:
+
+- owner
+- created_at
+- updated_at
+- place_name
+- place_type
+- address
+- city
+- country
+- website
+- phone_number
+- description
+- image
+
+The model and serializer are following the same logic as the profiles app, so I will not explain it again.
+
+But, the creation of the places is a bit different, as we need to create a new view that will be used to create the places.
+
+The reason for this is that we need to check first if the place already exists in the database, and if it does, we will inform that.
+
+Please, refer to the views.py file in the places app to see how the generic views are used. And, most importantly, how the get_or_create method is used.
+
+```python
+def perform_create(self, serializer):
+        place, created = Place.objects.get_or_create(
+            place_name=self.request.data.get('place_name'),
+            city=self.request.data.get('city'),
+            defaults={'owner': self.request.user}
+        )
+        if not created:
+            raise ValidationError(
+                "A place with this name and city already exists."
+                )
+```
+
+**IMPORTANT NOTE:** during the creation of this view, it was needed to delete the DB and create it again, because the get_or_create method was not working as expected. So, it was needed to install the django-extensions package, and run the following command:
+
+```bash
+python3 manage.py reset_db
+```
+
+After this, it is needed to run all migrations again.
+
