@@ -1,3 +1,5 @@
+# THE POSITIVE SOCIAL NETWORK API
+
 ![Positive logo](./README_images/cover.jpg)
 
 Welcome,
