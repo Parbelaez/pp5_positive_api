@@ -23,9 +23,9 @@ This is the Positive Social Network API, a project for the Code Institute Full S
 - [Profiles app](#profiles-app)
   - [Serializers](#serializers)
   - [Permissions](#permissions)
+- [Places app](#places-app)
 - [Posts app](#posts-app)
 - [Likes app](#likes-app)
-- [Places app](#places-app)
 
 
 ## Introduction
@@ -238,6 +238,54 @@ Please, check the permissions.py file in the main folder.
 
 ![Permissions](./README_images/profile_permissions.gif)
 
+### Places app
+
+This app will be used to manage the places of the Positive Social Network.
+The list of categories will be the following:
+
+- Restaurant
+- Bar
+- Hotel
+- Museum
+- Park
+- Beach
+- Other
+
+The places will have the following fields:
+
+- owner
+- created_at
+- updated_at
+- place_name
+- place_type
+- address
+- city
+- country
+- website
+- phone_number
+- description
+- image
+
+The model and serializer are following the same logic as the profiles app, so I will not explain it again.
+
+But, the creation of the places is a bit different, as we need to create a new view that will be used to create the places.
+
+The reason for this is that we need to check first if the place already exists in the database, and if it does, we will inform that.
+
+Please, refer to the views.py file in the places app to see how the generic views are used. And, most importantly, how the get_or_create method is used.
+
+```python
+def perform_create(self, serializer):
+        place, created = Place.objects.get_or_create(
+            place_name=self.request.data.get('place_name'),
+            city=self.request.data.get('city'),
+            defaults={'owner': self.request.user}
+        )
+        if not created:
+            raise ValidationError(
+                "A place with this name and city already exists."
+                )
+```
 
 ### Posts app
 
@@ -295,6 +343,17 @@ def validate_image(self, value):
         # We return the value if it is compliant with our requirements
         return value
 ```
+Now, a visit cannot take place in the future, so we need to add a validation for that. This validation will be added to the serializer.
+
+```python
+def validate_visit_date(self, value):
+        if value > date.today():
+            raise serializers.ValidationError(
+                'The visit date cannot be in the future'
+                )
+        return value
+```
+
 
 ### Likes app
 
@@ -364,56 +423,7 @@ Therefore, there is no need to create the methods as before.
 
 ***NOTE:*** the previous views will be left as they are (no refactoring), because they are intended to be a sample of the different ways to create views.
 
-### Places app
-
-This app will be used to manage the places of the Positive Social Network.
-The list of categories will be the following:
-
-- Restaurant
-- Bar
-- Hotel
-- Museum
-- Park
-- Beach
-- Other
-
-The places will have the following fields:
-
-- owner
-- created_at
-- updated_at
-- place_name
-- place_type
-- address
-- city
-- country
-- website
-- phone_number
-- description
-- image
-
-The model and serializer are following the same logic as the profiles app, so I will not explain it again.
-
-But, the creation of the places is a bit different, as we need to create a new view that will be used to create the places.
-
-The reason for this is that we need to check first if the place already exists in the database, and if it does, we will inform that.
-
-Please, refer to the views.py file in the places app to see how the generic views are used. And, most importantly, how the get_or_create method is used.
-
-```python
-def perform_create(self, serializer):
-        place, created = Place.objects.get_or_create(
-            place_name=self.request.data.get('place_name'),
-            city=self.request.data.get('city'),
-            defaults={'owner': self.request.user}
-        )
-        if not created:
-            raise ValidationError(
-                "A place with this name and city already exists."
-                )
-```
-
-**IMPORTANT NOTE:** during the creation of this view, it was needed to delete the DB and create it again, because the get_or_create method was not working as expected. So, it was needed to install the django-extensions package, and run the following command:
+**IMPORTANT NOTE:** during the creation of some views, it was needed to delete the DB and create it again, because the get_or_create method was not working as expected. So, it was needed to install the django-extensions package, and run the following command:
 
 ```bash
 python3 manage.py reset_db
@@ -421,3 +431,40 @@ python3 manage.py reset_db
 
 After this, it is needed to run all migrations again.
 
+One last step needed: we need to see what posts has each user liked, and what type of like has been used (if liked). And, this is something that we will handle in the posts serializer.
+
+First, create a SerializerMethodField in the posts serializer:
+
+```python
+like_type = serializers.SerializerMethodField()
+```
+Then, create the get_like_type method in the posts serializer:
+
+```python
+def get_like_type(self, obj):
+    try:
+        like = Like.objects.get(
+            user=self.context['request'].user,
+            post=obj
+        )
+        return like.like_type
+    except Like.DoesNotExist:
+        return None
+```
+
+Lastly, add the like_type to the fields in the Meta class of the posts serializer:
+
+```python
+fields = (
+    'id',
+    'owner',
+    'title',
+    'created_at',
+    'updated_at',
+    'visit_date',
+    'content',
+    'image',
+    'recomendation',
+    'like_type'
+)
+```
