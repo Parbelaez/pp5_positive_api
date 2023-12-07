@@ -423,11 +423,13 @@ RetrieveUpdateDestroyAPIView is a generic view that provides GET (retrieve), PUT
 
 Therefore, there is no need to create the methods as before.
 
-***NOTE 1:*** the previous views will be left as they are (no refactoring), because they are intended to be a sample of the different ways to create views.
+***NOTE 1:*** some views were left as they are (no refactoring), because they are intended to be a sample of the different ways to create views.
 
 ***NOTE 2:*** the places view was created after the posts and likes views, therefore, it was not stated in this README.md that we used generics.
 
-One last step needed: we need to see what posts has each user liked, and what type of like has been used (if liked). And, this is something that we will handle in the posts serializer.
+#### Likes usage in other views
+
+We need to see what posts has each user liked, and what type of like has been used (if liked). And, this is something that we will handle in the posts serializer.
 
 First, create a SerializerMethodField in the posts serializer:
 
@@ -464,6 +466,27 @@ fields = (
     'like_type'
 )
 ```
+
+And, it is also needed to have the count of like_types (how many tops, likes and dislikes) in the posts views.
+
+```python
+from django.db.models import Count, Q
+
+queryset = Post.objects.annotate(
+    num_top=Count('post_likes__like_type', filter=Q(post_likes__like_type='top')),
+    num_like=Count('post_likes__like_type', filter=Q(post_likes__like_type='like')),
+    num_dislike=Count('post_likes__like_type', filter=Q(post_likes__like_type='dislike'))
+).order_by('-created_at')
+```
+
+And then, add the fields as well to the serializer:
+
+```python
+num_top = serializers.ReadOnlyField()
+num_likes = serializers.ReadOnlyField()
+num_dislikes = serializers.ReadOnlyField()
+
+
 
 ---
 **IMPORTANT:** during the creation of some views, it was needed to delete the DB and create it again, because the get_or_create method was not working as expected. So, it was needed to install the django-extensions package, and run the following command:

@@ -2,7 +2,7 @@ from rest_framework import generics, permissions, filters
 from .models import Post
 from .serializers import PostSerializer
 from positive_api.permissions import IsOwnerOrReadOnly
-from django.db.models import Count
+from django.db.models import Count, Q
 
 
 class PostList(generics.ListCreateAPIView):
@@ -14,10 +14,26 @@ class PostList(generics.ListCreateAPIView):
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Post.objects.annotate(
-        num_top=Count('post_likes', filter=Count('post_likes', like_type='top')),
-        num_like=Count('post_likes', filter=Count('post_likes', like_type='like')),
-        num_dislike=Count('post_likes', filter=Count('post_likes', like_type='dislike'))
+        # In previous versions of Django, we would have to use the
+        #Case When statement. After Django 3.2, we can use the Count
+        #function with the filter parameter to count the number of
+        #likes of each type.
+        num_top=Count('post_likes__like_type',
+            filter=Q(post_likes__like_type='top')
+            ),
+        num_like=Count('post_likes__like_type',
+            filter=Q(post_likes__like_type='like')
+            ),
+        num_dislike=Count('post_likes__like_type',
+            filter=Q(post_likes__like_type='dislike')
+            )
     ).order_by('-created_at')
+
+    filter_backends = [filters.SearchFilter, filters.OrderingFilter]
+    search_fields = ['post_place__place_name', 'post_place__city']
+    ordering_fields = ['post_place__place_name',
+        'post_place__city', 'created_at'
+        ]
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -28,9 +44,15 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     permission_classes = [IsOwnerOrReadOnly]
     queryset = Post.objects.annotate(
-        num_top=Count('post_likes', filter=Count('post_likes', like_type='top')),
-        num_like=Count('post_likes', filter=Count('post_likes', like_type='like')),
-        num_dislike=Count('post_likes', filter=Count('post_likes', like_type='dislike'))
+        num_top=Count('post_likes__like_type',
+            filter=Q(post_likes__like_type='top')
+            ),
+        num_like=Count('post_likes__like_type',
+            filter=Q(post_likes__like_type='like')
+            ),
+        num_dislike=Count('post_likes__like_type',
+            filter=Q(post_likes__like_type='dislike')
+            )
     ).order_by('-created_at')
     serializer_class = PostSerializer
 
