@@ -54,6 +54,7 @@ INSTALLED_APPS = [
     'cloudinary',
     'rest_framework',
     'django_extensions',
+    'cities_light',
 
     # My apps
     'profiles',

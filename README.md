@@ -289,6 +289,54 @@ def perform_create(self, serializer):
                 )
 ```
 
+#### Adding django-cities-light to the project
+
+We will use the ![django-cities-light](https://pypi.org/project/django-cities-light/) package to get the cities and countries from the database.
+
+```bash
+pip install django-cities-light
+```
+
+Then, we need to add the following lines to the settings.py file
+
+```python
+INSTALLED_APPS = [
+    ...
+    'cities_light',
+    ...
+]
+```
+
+Then, we need to run the migrations
+
+```bash
+python3 manage.py migrate
+Operations to perform:
+  Apply all migrations: admin, auth, cities_light, contenttypes, likes, places, posts, profiles, sessions
+Running migrations:
+  Applying cities_light.0001_initial... OK
+  Applying cities_light.0002_city... OK
+  Applying cities_light.0003_auto_20141120_0342... OK
+  Applying cities_light.0004_autoslug_update... OK
+  Applying cities_light.0005_blank_phone... OK
+  Applying cities_light.0006_compensate_for_0003_bytestring_bug... OK
+  Applying cities_light.0007_make_country_name_not_unique... OK
+  Applying cities_light.0008_city_timezone... OK
+  Applying cities_light.0009_add_subregion... OK
+  Applying cities_light.0010_auto_20200508_1851... OK
+  Applying cities_light.0011_alter_city_country_alter_city_region_and_more... OK
+```
+
+And, if we go to the admin panel, we will see that we have the cities and countries in the database.
+
+![Cities and Countries](./README_images/cities-light.png)
+
+Then, we need to load the data (populate the database) with the following command:
+
+```bash
+python3 manage.py cities_light
+```
+
 ### Posts app
 
 This app will be used to manage the posts of the Positive Social Network. We will use the default Django User model, but we will add some extra fields to it.
@@ -485,6 +533,7 @@ And then, add the fields as well to the serializer:
 num_top = serializers.ReadOnlyField()
 num_likes = serializers.ReadOnlyField()
 num_dislikes = serializers.ReadOnlyField()
+```
 
 
 
@@ -495,5 +544,24 @@ num_dislikes = serializers.ReadOnlyField()
 python3 manage.py reset_db
 ```
 After this, it is needed to run all migrations again.
+
+Also, to check the DB, you can do it in the command line:
+
+```bash
+sqlite3 db.sqlite3
+```
+
+And, to see the tables:
+
+```bash
+.tables
+```
+
+To delete/truncate a table:
+
+```bash
+DELETE FROM <table_name>;
+VACUUM;
+```
 
 ---
