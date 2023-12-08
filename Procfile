@@ -1,2 +1,2 @@
 release: python manage.py makemigrations && python manage.py migrate
-web: gunicorn positive-api.wsgi
+web: gunicorn positive_api.wsgi
