@@ -700,6 +700,35 @@ It is not mandatory, but it would be good to have a page that indicates that the
 
 Please, refer to the file to see how it was done.
 
+### Pagination
+
+Easy-peasy... just add the following lines to the settings.py file
+
+```python
+REST_FRAMEWORK = {
+
+    ...
+
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+}
+```
+
+#### json as render format
+
+We only need the html format for development, but we need the json format for production. So, we need to add the following lines to the settings.py file
+
+```python
+
+if 'DEV' not in os.environ:
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': [
+            'rest_framework.renderers.JSONRenderer',
+        ]
+    }
+```
+
 ### Heroku
 
 The API was deployed to Heroku, and the database used was Postgres.

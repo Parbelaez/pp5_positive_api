@@ -29,12 +29,28 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 REST_FRAMEWORK = {
+    # JWT in production, Session in development
     'DEFAULT_AUTHENTICATION_CLASSES': [(
         'rest_framework.authentication.SessionAuthentication'
         if 'DEV' in os.environ and os.environ['DEV'] == 'True'
         else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
-    )]
+    )],
+
+    # Pagination
+    'DEFAULT_PAGINATION_CLASS':
+        'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    # Date and time formats
+    'DATETIME_FORMAT': "%Y-%m-%d at %H:%M:%S",
 }
+
+# JSON and html renderer only in development
+if 'DEV' not in os.environ:
+    REST_FRAMEWORK = {
+        'DEFAULT_RENDERER_CLASSES': [
+            'rest_framework.renderers.JSONRenderer',
+        ]
+    }
 
 # JWT
 REST_USE_JWT = True
