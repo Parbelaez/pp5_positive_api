@@ -28,6 +28,13 @@ This is the Positive Social Network API, a project for the Code Institute Full S
 - [Places app](#places-app)
 - [Posts app](#posts-app)
 - [Likes app](#likes-app)
+    - [Likes usage in other views](#likes-usage-in-other-views)
+- [Deployment](#deployment)
+    - [JWT Authentication](#jwt-authentication)
+    - [Setting up the home page](#setting-up-the-home-page)
+    - [Pagination](#pagination)
+    - [json as render format](#json-as-render-format)
+    - [Heroku](#heroku)
 
 ## Introduction
 
@@ -715,7 +722,7 @@ REST_FRAMEWORK = {
 }
 ```
 
-#### json as render format
+### json as render format
 
 We only need the html format for development, but we need the json format for production. So, we need to add the following lines to the settings.py file
 
@@ -733,7 +740,95 @@ if 'DEV' not in os.environ:
 
 The API was deployed to Heroku, and the database used was Postgres.
 
+So, for this project, we are using ElephantSQL, which is a PostgreSQL database hosting service.
+
+Then, install the following packages:
+
+```bash
+pip3 install dj_database_url psycopg2
+```
+
+Then, we need to add the following lines to the settings.py file
+
+```python
+import dj_database_url
+```
+
+...and update the DATABASES variable
+
+```python
+ if 'DEV' in os.environ:
+     DATABASES = {
+         'default': {
+             'ENGINE': 'django.db.backends.sqlite3',
+             'NAME': BASE_DIR / 'db.sqlite3',
+         }
+     }
+ else:
+     DATABASES = {
+         'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
+     }
+```
+
+In your env.py file, you need to add the following line:
+
+```python
+os.environ['DATABASE_URL'] = "<your PostgreSQL URL here>"
+```
+
+Then migrate and create your new superuser for the new DB
+
+```bash
+python3 manage.py migrate
+python3 manage.py createsuperuser
+```
+
+You already know how to create an app in Heroku (if not, please refer to my previous project README.md file at [The WC readme](https://github.com/Parbelaez/ci_fsd_pp4_the_wc/blob/main/README.md), but I will show you the variables setup, anyway:
+
+![Heroku variables](./README_images/heroku_variables.png)
+
 To deploy the API to Heroku, we need to create a Procfile in the root of the project, and add the following line:
+
+```bash
+pip3 install gunicorn django-cors-headers
+```
+
+Update the requirements.txt file
+
+Create the Procfile in the root of the project, and add the following lines:
+
+release: python manage.py makemigrations && python manage.py migrate
+web: gunicorn drf_api.wsgi
+
+Add the app to the INSTALLED_APPS in the settings.py file
+
+```python
+INSTALLED_APPS = [
+    ...
+    'corsheaders',
+    ...
+]
+```
+
+...and the middleware
+
+```python
+MIDDLEWARE = [
+    ...
+    'corsheaders.middleware.CorsMiddleware',
+    ...
+]
+```
+
+Then, add the following lines to the settings.py file
+
+```python
+
+Add the url to the allowed hosts in the settings.py file (remember that heroku is using a different url creation model, therefore, you need to check exactly the url that has been assigned to your app)
+
+
+
+
 
 ```bash
 web: gunicorn positive_api.wsgi:application
