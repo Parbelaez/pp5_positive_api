@@ -29,7 +29,6 @@ This is the Positive Social Network API, a project for the Code Institute Full S
 - [Posts app](#posts-app)
 - [Likes app](#likes-app)
 
-
 ## Introduction
 
 This project is a Django API for the Positive Social Network, a social network for people to share only positive reviews of restaurants, bars, hotels, etc.
@@ -108,6 +107,7 @@ CLOUDINARY_STORAGE = {
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 ```
+
 The MEDIA_URL is the URL where the images will be stored by Django. In this case, we will use the default one, which is /media/
 
 ## Creating the apps
@@ -141,8 +141,6 @@ Then, we need to add the app to the INSTALLED_APPS in the settings.py file
 ```
 
 ## Entities Relationship Diagram (ERD)
-
-
 
 ### Profiles app
 
@@ -218,6 +216,7 @@ INSTALLED_APPS = [
     ...
 ]
 ```
+
 Then we need to create a serializers.py file in the profiles app.
 (Check the serializers.py file in the profiles app and how it was used in the views.py file)
 
@@ -354,7 +353,7 @@ The posts will have the following fields:
 
 The model and serializer are following the same logic as the profiles app, so I will not explain it again.
 
-But, we added  a Image Filter and Validation. This is because we want to make sure that the image that is uploaded is a valid image.
+But, we added a Image Filter and Validation. This is because we want to make sure that the image that is uploaded is a valid image.
 
 The image filter is defined in the models.py file
 
@@ -393,6 +392,7 @@ def validate_image(self, value):
         # We return the value if it is compliant with our requirements
         return value
 ```
+
 Now, a visit cannot take place in the future, so we need to add a validation for that. This validation will be added to the serializer.
 
 ```python
@@ -403,7 +403,6 @@ def validate_visit_date(self, value):
                 )
         return value
 ```
-
 
 ### Likes app
 
@@ -471,9 +470,9 @@ RetrieveUpdateDestroyAPIView is a generic view that provides GET (retrieve), PUT
 
 Therefore, there is no need to create the methods as before.
 
-***NOTE 1:*** some views were left as they are (no refactoring), because they are intended to be a sample of the different ways to create views.
+**_NOTE 1:_** some views were left as they are (no refactoring), because they are intended to be a sample of the different ways to create views.
 
-***NOTE 2:*** the places view was created after the posts and likes views, therefore, it was not stated in this README.md that we used generics.
+**_NOTE 2:_** the places view was created after the posts and likes views, therefore, it was not stated in this README.md that we used generics.
 
 #### Likes usage in other views
 
@@ -484,6 +483,7 @@ First, create a SerializerMethodField in the posts serializer:
 ```python
 like_type = serializers.SerializerMethodField()
 ```
+
 Then, create the get_like_type method in the posts serializer:
 
 ```python
@@ -535,14 +535,14 @@ num_likes = serializers.ReadOnlyField()
 num_dislikes = serializers.ReadOnlyField()
 ```
 
-
-
 ---
+
 **IMPORTANT:** during the creation of some views, it was needed to delete the DB and create it again, because the get_or_create method was not working as expected. So, it was needed to install the django-extensions package, and run the following command:
 
 ```bash
 python3 manage.py reset_db
 ```
+
 After this, it is needed to run all migrations again.
 
 Also, to check the DB, you can do it in the command line:
@@ -565,3 +565,154 @@ VACUUM;
 ```
 
 ---
+
+## Deployment
+
+### JWT Authentication
+
+We will use JWT Authentication to authenticate users in our API. JWT stands for JSON Web Token, and it is a standard that defines a compact and self-contained way for securely transmitting information between parties as a JSON object. This information can be verified and trusted because it is digitally signed.
+
+To install JWT Authentication, we need to run the following command:
+
+```bash
+pip install dj-rest-auth
+```
+
+Then, we need to add the following lines to the settings.py file
+
+```python
+INSTALLED_APPS = [
+    ...
+    'rest_framework.authtoken',
+    'dj_rest_auth',
+    ...
+]
+```
+
+Then, we need to add the following lines to the urls.py file
+
+```python
+urlpatterns = [
+    ...
+    path('dj-rest-auth/', include('dj_rest_auth.urls')),
+    ...
+]
+```
+
+Now, we need to migrate the DB
+
+```bash
+python3 manage.py migrate
+```
+
+But, we also need the users to be able to register. For this, we will use the dj-rest-auth package, which is a set of REST API endpoints for authentication. It is built on top of Django REST Framework.
+
+To install dj-rest-auth, we need to run the following command:
+
+```bash
+pip install dj-rest-auth[with_social]
+```
+
+Then, we need to add the following lines to the settings.py file
+
+```python
+INSTALLED_APPS = [
+    ...
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'dj_rest_auth.registration',
+    ...
+]
+```
+
+...and add the flag: SITE_ID = 1
+
+(But, why? you may ask. I did too... this post has a very good explanation: https://stackoverflow.com/questions/25468676/django-sites-model-what-is-and-why-is-site-id-1)
+
+Then, we need to add the following lines to the urls.py file
+
+```python
+urlpatterns = [
+    ...
+    path('dj-rest-auth/registration/', include('dj_rest_auth.registration.urls')),
+    ...
+]
+```
+
+And, now... FINALLY, the tokens:
+
+```bash
+pip install djangorestframework_simplejwt
+```
+
+DRF does not support JWT out of the box (basically, we need to use session authentication in the development, and JWT for production... yeah, it sucks...), so we need to:
+
+1. Create a DEV variable in the env.py file:
+
+    ```python
+    os.environ['DEV'] = 'True'
+    ```
+
+2. Use that variable to check if we are in development or production:
+
+    ```python
+    REST_FRAMEWORK = {
+        'DEFAULT_AUTHENTICATION_CLASSES': [(
+            'rest_framework.authentication.SessionAuthentication'
+            if 'DEV' in os.environ and os.environ['DEV'] == 'True'
+            else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
+        )]
+    }
+
+    REST_USE_JWT = True
+    JWT_AUTH_SECURE = True
+    JWT_AUTH_COOKIE = 'jwt-auth'
+    JWT_AUTH_REFRESH_COOKIE = 'jwt-refresh-auth'
+    ```
+
+3. Create a serializers.py file in the project folder (positive_api).
+
+4. Modify the settings.py file adding:
+
+    ```python
+    REST_AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'positive_api.serializers.CurrentUserDetailSerializer'
+    }
+    ```
+5. allauth.account.middleware.AccountMiddleware must be added to settings.MIDDLEWARE
+
+6. Add the following lines to the urls.py file
+
+    ```python
+    MIDDLEWARE = [
+    ...
+    'allauth.account.middleware.AccountMiddleware',
+    ...]
+    ```
+
+7. Run the migrations
+
+
+### Heroku
+
+The API was deployed to Heroku, and the database used was Postgres.
+
+To deploy the API to Heroku, we need to create a Procfile in the root of the project, and add the following line:
+
+```bash
+web: gunicorn positive_api.wsgi:application
+```
+
+Then, we need to install gunicorn
+
+```bash
+pip3 install gunicorn
+```
+
+Then, we need to create a requirements.txt file
+
+```bash
+pip3 freeze > requirements.txt
+```
