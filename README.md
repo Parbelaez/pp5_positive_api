@@ -694,6 +694,11 @@ DRF does not support JWT out of the box (basically, we need to use session authe
 
 7. Run the migrations
 
+### Setting up the home page
+
+It is not mandatory, but it would be good to have a page that indicates that the API is working. For that, we will create a views.py file in the main folder (positive_api), and will use the api_view decorator from DRF.
+
+Please, refer to the file to see how it was done.
 
 ### Heroku
 
