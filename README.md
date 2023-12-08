@@ -785,7 +785,7 @@ python3 manage.py createsuperuser
 
 You already know how to create an app in Heroku (if not, please refer to my previous project README.md file at [The WC readme](https://github.com/Parbelaez/ci_fsd_pp4_the_wc/blob/main/README.md), but I will show you the variables setup, anyway:
 
-![Heroku variables](./README_images/heroku_variables.png)
+![Heroku variables](./README_images/heroku_vars.png)
 
 To deploy the API to Heroku, we need to create a Procfile in the root of the project, and add the following line:
 
@@ -820,14 +820,7 @@ MIDDLEWARE = [
 ]
 ```
 
-Then, add the following lines to the settings.py file
-
-```python
-
 Add the url to the allowed hosts in the settings.py file (remember that heroku is using a different url creation model, therefore, you need to check exactly the url that has been assigned to your app)
-
-
-
 
 
 ```bash
