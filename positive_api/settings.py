@@ -71,7 +71,7 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS=[
     'http://127.0.0.1:8000/',
-    'https://'+os.environ.get('ALLOWED_HOST')+'/',
+    'https://positive-api-55b6b5b25a88.herokuapp.com/',
 ]
 
 # Application definition
