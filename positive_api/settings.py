@@ -16,7 +16,6 @@ CLOUDINARY_STORAGE = {
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,7 +23,7 @@ REST_FRAMEWORK = {
     # JWT in production, Session in development
     'DEFAULT_AUTHENTICATION_CLASSES': [(
         'rest_framework.authentication.SessionAuthentication'
-        if 'DEV' in os.environ and os.environ['DEV'] == 'True'
+        if 'DEV' in os.environ
         else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
     )],
 
@@ -33,7 +32,7 @@ REST_FRAMEWORK = {
         'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 10,
     # Date and time formats
-    'DATETIME_FORMAT': "%Y-%m-%d at %H:%M:%S",
+    'DATETIME_FORMAT': "%Y-%m-%d at %-I:%M %p",
 }
 
 # JSON and html renderer only in development
@@ -62,13 +61,18 @@ REST_AUTH_SERIALIZERS = {
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = 'DEV' in os.environ and os.environ['DEV'] == 'True'
+DEBUG = 'DEV' in os.environ
 
 ALLOWED_HOSTS = [
+    os.environ.get('ALLOWED_HOST'),
     'localhost',
     '127.0.0.1',
-    os.environ.get('ALLOWED_HOST'),]
+    ]
 
+CSRF_TRUSTED_ORIGINS=[
+    'http://127.0.0.1:8000/',
+    'https://'+os.environ.get('ALLOWED_HOST')+'/',
+]
 
 # Application definition
 
@@ -169,14 +173,6 @@ else:
     DATABASES = {
         'default': dj_database_url.parse(os.environ.get("DATABASE_URL"))
     }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
