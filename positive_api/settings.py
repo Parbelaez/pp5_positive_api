@@ -1,6 +1,9 @@
 from pathlib import Path
 import os
 import dj_database_url
+# Only for GitPod users
+import re
+
 
 if os.path.exists('env.py'):
     import env
@@ -114,8 +117,15 @@ if 'CLIENT_ORIGIN' in os.environ:
         os.environ.get('CLIENT_ORIGIN')
     ]
 else:
+    # Only for GitPod users
+    # Extract the url from the CLIENT_ORIGIN_DEV variable and use it to create
+    # a regex. This way, the CORS_ALLOWED_ORIGIN_REGEXES will match the
+    # GitPod url, regardless of the workspace id.
+    extracted_url = re.match(r'^.+-',
+        os.environ.get('CLIENT_ORIGIN_DEV', ''),
+        re.IGNORECASE).group(0)
     CORS_ALLOWED_ORIGIN_REGEXES = [
-        r"^https://.*\.gitpod\.io$",
+        rf"{extracted_url}(eu|us)\d+\w\.gitpod\.io$",
     ]
 
 CORS_ALLOW_CREDENTIALS = True
