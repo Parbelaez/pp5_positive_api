@@ -64,7 +64,7 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = 'DEV' in os.environ and os.environ['DEV'] == 'True'
 
-ALLOWED_HOSTS = ['localhost', 'positive-api-55b6b5b25a88.herokuapp.com']
+ALLOWED_HOSTS = ['localhost', os.environ.get('ALLOWED_HOST'),]
 
 
 # Application definition
@@ -116,11 +116,11 @@ if 'CLIENT_ORIGIN' in os.environ:
     CORS_ALLOWED_ORIGINS = [
         os.environ.get('CLIENT_ORIGIN')
     ]
-else:
-    # Only for GitPod users
-    # Extract the url from the CLIENT_ORIGIN_DEV variable and use it to create
-    # a regex. This way, the CORS_ALLOWED_ORIGIN_REGEXES will match the
-    # GitPod url, regardless of the workspace id.
+# Only for GitPod users
+# Extract the url from the CLIENT_ORIGIN_DEV variable and use it to create
+# a regex. This way, the CORS_ALLOWED_ORIGIN_REGEXES will match the
+# GitPod url, regardless of the workspace id.
+if 'CLIENT_ORIGIN_DEV' in os.environ:
     extracted_url = re.match(r'^.+-',
         os.environ.get('CLIENT_ORIGIN_DEV', ''),
         re.IGNORECASE).group(0)
