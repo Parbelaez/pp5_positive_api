@@ -783,24 +783,27 @@ python3 manage.py migrate
 python3 manage.py createsuperuser
 ```
 
-You already know how to create an app in Heroku (if not, please refer to my previous project README.md file at [The WC readme](https://github.com/Parbelaez/ci_fsd_pp4_the_wc/blob/main/README.md), but I will show you the variables setup, anyway:
+You already know how to create an app in Heroku (if not, please refer to my previous project README.md file at [The WC readme](https://github.com/Parbelaez/ci_fsd_pp4_the_wc/blob/main/README.md)), but I will show you the variables setup, anyway:
 
 ![Heroku variables](./README_images/heroku_vars.png)
 
-To deploy the API to Heroku, we need to create a Procfile in the root of the project, and add the following line:
+Create the Procfile in the root of the project, and add the following lines:
+
+release: python manage.py makemigrations && python manage.py migrate
+web: gunicorn your_api_name.wsgi
+
+**NOTE 1:** the your_api_name is the name of your project, in this case, positive_api.
+**NOTE 2:** please, PLEASE, do not do what I always do (by mistake) to create the Procfile in the project folder. It should be in the root of the project (where the manage.py, README.md, and requirements.txt reside). Unless, your app will not launch in Heroku.
+
+As we will be using postgres, we need to install the following packages:
 
 ```bash
 pip3 install gunicorn django-cors-headers
 ```
 
-Update the requirements.txt file
+Update the requirements.txt file.
 
-Create the Procfile in the root of the project, and add the following lines:
-
-release: python manage.py makemigrations && python manage.py migrate
-web: gunicorn drf_api.wsgi
-
-Add the app to the INSTALLED_APPS in the settings.py file
+Add the app to the INSTALLED_APPS in the settings.py file:
 
 ```python
 INSTALLED_APPS = [
@@ -838,3 +841,19 @@ Then, we need to create a requirements.txt file
 ```bash
 pip3 freeze > requirements.txt
 ```
+
+## Bugs
+
+### Solved
+
+#### 1. dj-rest-auth
+
+(Taken from the [Code Institute DRF](https://learn.codeinstitute.net/courses/course-v1:CodeInstitute+DRF+2021_T1/courseware/a6250c9e9b284dbf99e53ac8e8b68d3e/0c9a4768eea44c38b06d6474ad21cf75/?child=first) tutorial)
+
+It turns out that dj-rest-auth has a bug that doesn’t allow users to log out (ref: DRF Rest Auth Issues).
+
+The issue is that the samesite attribute we set to ‘None’ in settings.py (JWT_AUTH_SAMESITE = 'None') is not passed to the logout view. This means that we can’t log out, but must wait for the refresh token to expire instead.
+
+Proposed Solution: One way to fix this issue is to have our own logout view, where we set both cookies to an empty string and pass additional attributes like secure, httponly and samesite, which was left out by mistake by the library.
+
+All fixes are indicated in the code with the comment: # dj-rest-auth bug fix workaround.
