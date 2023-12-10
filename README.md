@@ -149,6 +149,11 @@ Then, we need to add the app to the INSTALLED_APPS in the settings.py file
 
 ## Entities Relationship Diagram (ERD)
 
+![ERD](./README_images/erd.png)
+
+**NOTE:** The Country and City models are created by the ![django-cities-light](https://pypi.org/project/django-cities-light/) package.
+
+
 ### Profiles app
 
 This app will be used to manage the users of the Positive Social Network. We will use the default Django User model, but we will add some extra fields to it.
