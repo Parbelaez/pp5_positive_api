@@ -36,7 +36,7 @@ REST_FRAMEWORK = {
 }
 
 # JSON and html renderer only in development
-if 'DEV' not in os.environ:
+if 'HTML_REND' not in os.environ:
     REST_FRAMEWORK = {
         'DEFAULT_RENDERER_CLASSES': [
             'rest_framework.renderers.JSONRenderer',
@@ -65,6 +65,7 @@ DEBUG = 'DEBUG' in os.environ
 
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOSTS'),
+    '.gitpod.io',
     'localhost',
     '127.0.0.1',
     ]
@@ -72,6 +73,7 @@ ALLOWED_HOSTS = [
 CSRF_TRUSTED_ORIGINS=[
     'http://127.0.0.1:8000/',
     'https://positive-api-55b6b5b25a88.herokuapp.com/',
+    'https://8000-parbelaez-pp5positiveap-kikjc8c1xua.ws-eu106.gitpod.io',
 ]
 
 # Application definition
