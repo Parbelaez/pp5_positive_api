@@ -1,4 +1,4 @@
-from dj_rest_auth import UserDetailSerializer
+from dj_rest_auth.serializers import UserDetailSerializer
 from rest_framework import serializers
 
 
