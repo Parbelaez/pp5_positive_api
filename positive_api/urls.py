@@ -10,7 +10,6 @@ urlpatterns = [
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     # dj-rest-auth bug fix workaround
     path('dj-rest-auth/logout/', logout_route),
-    path('dj-rest-auth/', include('dj_rest_auth.urls')),
     # end of dj-rest-auth bug fix workaround
     path(
         'dj-rest-auth/registration/',
