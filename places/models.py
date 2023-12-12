@@ -24,8 +24,8 @@ class Place(models.Model):
         default='other'
         )
     address = models.CharField(max_length=100)
-    country = models.ForeignKey('cities_light.Country', on_delete=models.CASCADE)
-    city = models.ForeignKey('cities_light.City', on_delete=models.CASCADE)
+    country = models.CharField(max_length=100)
+    city = models.CharField(max_length=100)
     website = models.URLField(blank=True)
     phone_number = models.CharField(max_length=100, blank=True)
     description = models.TextField(blank=True)
