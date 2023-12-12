@@ -51,7 +51,7 @@ JWT_AUTH_REFRESH_COOKIE = 'jwt-refresh-auth'
 JWT_AUTH_SAMESITE = 'None'
 
 REST_AUTH_SERIALIZERS = {
-    'USER_DETAILS_SERIALIZER': 'positive_api.serializers.CurrentUserDetailSerializer'
+    'USER_DETAILS_SERIALIZER': 'positive_api.serializers.CurrentUserSerializer'
 }
 
 # Quick-start development settings - unsuitable for production
