@@ -11,8 +11,7 @@
     * [Places](#places)
     * [Posts](#posts)
     * [Likes](#likes)
-    * [Full Testing](#full-testing)
-
+    * [Testing Devices](#testing-devices)
 
 
 ## AUTOMATED TESTING
