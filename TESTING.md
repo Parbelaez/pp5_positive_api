@@ -60,9 +60,9 @@ In this section is included not only the functional parts of the webpage, but al
 
 | Goals | How are they achieved? | Image |
 | :--- | :--- | :--- |
-| The notifications and messages are displayed properly after the user has performed actions like: loging in, loging out, comment a writing, among other | Mapping the messages and displaying them using Bootstrap's notification banners | ![Logout](./readmeimages/logout_message.png) |
+| The places can be acceced in JSON format | By creating the whole app and managing the settings correctly as explained in the README | ![Places](./README_images/places_json.png) |
 | --- | --- | --- |
-| The notifications and messages are displayed for 3 seconds | Inserting a JS script in the base.html file | ![Timed Messages](./readmeimages/timed_messages.gif) |
+| The places details can be acceced in JSON format | By creating the whole app and managing the settings correctly as explained in the README | ![Places Details](./README_images/places_details_json.png) |
 
 
 ### Posts
