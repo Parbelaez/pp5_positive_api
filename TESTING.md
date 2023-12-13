@@ -47,12 +47,14 @@ In this section is included not only the functional parts of the webpage, but al
 | Goals | How are they achieved? | Image |
 | :--- | :--- | :--- |
 | The profiles can be acceced in JSON format | By creating the whole app and managing the settings correctly as explained in the README | ![Profile](./README_images/profiles_json.png) |
+| --- | --- | --- |
+| The profiles details can be acceced in JSON format | By creating the whole app and managing the settings correctly as explained in the README | ![Profile Details](./README_images/profile_details_json.png) |
 
 ### Image upload to Cloudinary
 
 | Goals | How are they achieved? | Image |
 | :--- | :--- | :--- |
-| The images are uploaded to Cloudinary | Using the Cloudinary API and the Cloudinary widget | ![Image Upload](./README_images/image_upload.png) |
+| The images are uploaded to Cloudinary | Using the Cloudinary API and the Cloudinary widget | ![Image Upload](./README_images/profiles_anim.gif) |
 
 ### Places
 

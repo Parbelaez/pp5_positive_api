@@ -1,5 +1,4 @@
 from rest_framework import generics, filters
-from rest_framework.views import APIView
 from .models import Profile
 from .serializers import ProfileSerializer
 from positive_api.permissions import IsOwnerOrReadOnly
