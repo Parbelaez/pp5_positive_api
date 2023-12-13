@@ -24,7 +24,7 @@ class ProfileList(generics.ListAPIView):
     filter_backends = [filters.OrderingFilter]
     ordering_fields = ['num_posts', 'num_places']
 
-class ProfileDetail(APIView):
+class ProfileDetail(generics.RetrieveUpdateAPIView):
     """
     Retrieve, update or delete a profile instance.
     """
