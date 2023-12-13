@@ -32,6 +32,6 @@ class PlaceList(generics.ListCreateAPIView):
                 )
 
 class PlaceDetail(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsOwnerOrReadOnly]
+    # permission_classes = [IsOwnerOrReadOnly]
     serializer_class = PlaceSerializer
     queryset = Place.objects.all()
