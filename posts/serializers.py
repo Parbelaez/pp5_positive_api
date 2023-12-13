@@ -12,7 +12,7 @@ class PostSerializer(serializers.ModelSerializer):
     # We will use the Method Field to realte if the logged user has liked
     # the post or not, and the type of like
     like_type = serializers.SerializerMethodField()
-    num_top = serializers.ReadOnlyField()
+    num_tops = serializers.ReadOnlyField()
     num_likes = serializers.ReadOnlyField()
     num_dislikes = serializers.ReadOnlyField()
 
@@ -89,7 +89,7 @@ class PostSerializer(serializers.ModelSerializer):
             # Type of like that the logged user has given to the post
             'like_type',
             # Count of like_types
-            'num_top',
+            'num_tops',
             'num_likes',
             'num_dislikes',
         ]

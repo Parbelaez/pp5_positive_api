@@ -36,6 +36,14 @@ In this section is included not only the functional parts of the webpage, but al
 | :--- | :--- | :--- |
 | The user has a cleat indication that the API is running | Implementing a root_route function | ![root_route](./README_images/root_route.png) |
 
+### Authentication
+
+| Goals | How are they achieved? | Image |
+| :--- | :--- | :--- |
+| The user can create an account | Using Django's built-in authentication system + Allauth | NOTE: full process shown in the FE README and TESTING files  |
+| --- | --- | --- |
+| The user can log in | Using Django's built-in authentication system + Allauth | ![login_logout](./README_images/login_logout.gif)  |
+
 ### Admin Panel
 
 | Goals | How are they achieved? | Image |
@@ -69,23 +77,21 @@ In this section is included not only the functional parts of the webpage, but al
 
 | Goals | How are they achieved? | Image |
 | :--- | :--- | :--- |
-| The user can create an account | Using Django's built-in authentication system + Allauth | ![Create Account](./readmeimages/signup.png) |
+| The posts can be acceced in JSON format | By creating the whole app and managing the settings correctly as explained in the README | ![Posts](./README_images/posts_json.png) |
 | --- | --- | --- |
-| The user can log in | Using Django's built-in authentication system + Allauth | ![Log In](./readmeimages/login.png) |
-| --- | --- | --- |
-| The user can log out | Using Django's built-in authentication system + Allauth | ![Log Out](./readmeimages/timed_messages.gif) |
+| The posts details can be acceced in JSON format | By creating the whole app and managing the settings correctly as explained in the README | ![Posts Details](./README_images/post_details_json.png) |
 
 ### Likes
 
 | Goals | How are they achieved? | Image |
 | :--- | :--- | :--- |
-| The user can create a writing | Using forms and Summernote, the user is having a full text editor experience | ![Create Writing](./readmeimages/text_editor.png) |
+| The user can choose between three different types of likes: top, like, dislike | By creating the whole app and managing the settings correctly as explained in the README | ![Likes](./README_images/like_types.png) |
+| The likes can be acceced in JSON format | By creating the whole app and managing the settings correctly as explained in the README | ![Likes](./README_images/post_likes.png) |
 | --- | --- | --- |
-| The user can edit a writing | Using forms and Summernote, the user is having a full text editor experience | ![Edit Writing](./readmeimages/edit_panel.png) |
-| --- | --- | --- |
-| The user can delete a writing | Using Django's DeleteView | ![Delete Writing](./readmeimages/delete_writing.png) |
+| The user can only like one post once | By creating the whole app and managing the settings correctly as explained in the README | ![Likes](./README_images/like_once.png) |
 
-### Full Testing
+
+### Testing Devices
 
 Full testing was performed on the following devices:
 

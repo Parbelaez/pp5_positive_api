@@ -18,13 +18,13 @@ class PostList(generics.ListCreateAPIView):
         #Case When statement. After Django 3.2, we can use the Count
         #function with the filter parameter to count the number of
         #likes of each type.
-        num_top=Count('post_likes__like_type',
+        num_tops=Count('post_likes__like_type',
             filter=Q(post_likes__like_type='top')
             ),
-        num_like=Count('post_likes__like_type',
+        num_likes=Count('post_likes__like_type',
             filter=Q(post_likes__like_type='like')
             ),
-        num_dislike=Count('post_likes__like_type',
+        num_dislikes=Count('post_likes__like_type',
             filter=Q(post_likes__like_type='dislike')
             )
     ).order_by('-created_at')
@@ -44,13 +44,13 @@ class PostDetail(generics.RetrieveUpdateDestroyAPIView):
     """
     permission_classes = [IsOwnerOrReadOnly]
     queryset = Post.objects.annotate(
-        num_top=Count('post_likes__like_type',
+        num_tops=Count('post_likes__like_type',
             filter=Q(post_likes__like_type='top')
             ),
-        num_like=Count('post_likes__like_type',
+        num_likes=Count('post_likes__like_type',
             filter=Q(post_likes__like_type='like')
             ),
-        num_dislike=Count('post_likes__like_type',
+        num_dislikes=Count('post_likes__like_type',
             filter=Q(post_likes__like_type='dislike')
             )
     ).order_by('-created_at')
