@@ -30,6 +30,7 @@ class PlaceList(generics.ListCreateAPIView):
             raise ValidationError(
                 "A place with this name and city already exists."
                 )
+        serializer.save(owner=self.request.user)
 
 class PlaceDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [IsOwnerOrReadOnly]
