@@ -70,11 +70,11 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     ]
 
-CSRF_TRUSTED_ORIGINS=[
-    'http://127.0.0.1:8000/',
-    'https://positive-api-55b6b5b25a88.herokuapp.com/',
-    'https://8000-parbelaez-pp5positiveap-kikjc8c1xua.ws-eu106.gitpod.io',
-]
+# CSRF_TRUSTED_ORIGINS=[
+#     'http://127.0.0.1:8000/',
+#     'https://positive-api-55b6b5b25a88.herokuapp.com/',
+#     'https://8000-parbelaez-pp5positiveap-kikjc8c1xua.ws-eu106.gitpod.io',
+# ]
 
 # Application definition
 
