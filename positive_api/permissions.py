@@ -70,6 +70,7 @@ class CustomJWTCookieAuthentication(JWTCookieAuthentication):
             logger.info("El token se fue a la puta")
             return None
 
+        logger.info(f"Antes de get validated_token {raw_token}")
         validated_token = self.get_validated_token(raw_token)
         logger.info(f"El token valido es {validated_token}")
         return self.get_user(validated_token), validated_token
