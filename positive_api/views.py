@@ -10,6 +10,7 @@ from .settings import (
     JWT_AUTH_COOKIE, JWT_AUTH_REFRESH_COOKIE, JWT_AUTH_SAMESITE,
     JWT_AUTH_SECURE,
 )
+from positive_api.permissions import CustomJWTCookieAuthentication
 
 logger = logging.getLogger(__name__)
 
@@ -46,6 +47,7 @@ def logout_route(request):
 
 
 class CustomUserDetailsView(UserDetailsView):
+    authentication_classes = [CustomJWTCookieAuthentication]
     permission_classes = (
         permissions.AllowAny,
     )
