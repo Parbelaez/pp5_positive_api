@@ -4,9 +4,11 @@ from django.conf import settings
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from rest_framework import permissions
+from rest_framework import permissions, status
 from dj_rest_auth.views import UserDetailsView, LoginView
 from dj_rest_auth.utils import jwt_encode, default_create_token
+from dj_rest_auth.jwt_auth import set_jwt_cookies
+from dj_rest_auth.serializers import JWTSerializer
 from rest_framework.authtoken.models import Token
 # dj-rest-auth bug fix workaround
 from .settings import (
@@ -79,5 +81,19 @@ class CustomLoginView(LoginView):
         elif token_model:
             self.token = default_create_token(token_model, self.user, self.serializer)
 
-        if settings.SESSION_LOGIN:
-            self.process_login()
+    def get_response(self):
+
+        data = {
+            'user': self.user,
+            'access': self.access_token,
+            'refresh': self.refresh_token
+        }
+        logger.info(f"La data es {data}")
+
+        serializer = JWTSerializer(
+            instance=data,
+            context=self.get_serializer_context(),
+        )
+        response = Response(serializer.data, status=status.HTTP_200_OK)
+        set_jwt_cookies(response, self.access_token, self.refresh_token)
+        return response
