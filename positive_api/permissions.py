@@ -77,7 +77,7 @@ class CustomJWTCookieAuthentication(JWTCookieAuthentication):
         logger.info(f"El token valido es {validated_token}")
         return self.get_user(validated_token), validated_token
 
-    def get_validated_token(raw_token):
+    def get_validated_token(self, raw_token):
         try:
             logger.info(f"Raw token es {raw_token}")
             return AccessToken(raw_token)
