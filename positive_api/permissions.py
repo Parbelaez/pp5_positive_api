@@ -1,6 +1,8 @@
 import logging
 
 from dj_rest_auth.jwt_auth import JWTCookieAuthentication
+from rest_framework_simplejwt.tokens import AccessToken
+from rest_framework_simplejwt.exceptions import TokenError
 from django.conf import settings
 from rest_framework import exceptions, permissions
 from rest_framework.authentication import CSRFCheck
@@ -74,3 +76,11 @@ class CustomJWTCookieAuthentication(JWTCookieAuthentication):
         validated_token = self.get_validated_token(raw_token)
         logger.info(f"El token valido es {validated_token}")
         return self.get_user(validated_token), validated_token
+
+    def get_validated_token(raw_token):
+        try:
+            logger.info(f"Raw token es {raw_token}")
+            return AccessToken(raw_token)
+        except TokenError as e:
+            logger.exception(f"Token invalido {str(e)}")
+            raise
