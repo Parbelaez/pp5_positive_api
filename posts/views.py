@@ -1,8 +1,9 @@
-from rest_framework import generics, permissions, filters
+from rest_framework import generics, permissions, filters, authentication
 from .models import Post
 from .serializers import PostSerializer
 from positive_api.permissions import IsOwnerOrReadOnly
 from django.db.models import Count, Q
+
 
 
 class PostList(generics.ListCreateAPIView):
@@ -11,7 +12,7 @@ class PostList(generics.ListCreateAPIView):
     The perform_create method is used to set the owner of the post to the
     current user.
     """
-    authentication = TokenAuthentication
+    authentication = authentication.TokenAuthentication
     serializer_class = PostSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = Post.objects.annotate(
