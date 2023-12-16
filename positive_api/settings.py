@@ -24,7 +24,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [(
         'rest_framework.authentication.SessionAuthentication'
         if 'DEV' in os.environ
-        else 'positive_api.permissions.CustomJWTCookieAuthentication`'
+        else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
     )],
 
     # Pagination
@@ -44,7 +44,8 @@ if 'HTML_REND' not in os.environ:
     }
 
 # JWT
-REST_USE_JWT = True
+# REST_USE_JWT = True
+USE_JWT = True
 JWT_AUTH_SECURE = True
 JWT_AUTH_COOKIE = 'jwt-auth'
 JWT_AUTH_REFRESH_COOKIE = 'jwt-refresh-auth'
