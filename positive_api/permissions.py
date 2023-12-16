@@ -63,7 +63,7 @@ class CustomJWTCookieAuthentication(JWTCookieAuthentication):
             else:
                 return None
         else:
-            logger.info("Header is not none")
+            logger.info(f"Header is not none {header}")
             raw_token = self.get_raw_token(header)
 
         if raw_token is None:
