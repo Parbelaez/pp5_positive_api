@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 # dj-rest-auth bug fix workaround... add the logut_route import
-from .views import root_route, logout_route, CustomUserDetailsView
+from .views import root_route, logout_route, CustomUserDetailsView, CustomLoginView
 
 urlpatterns = [
     path('', root_route),
@@ -9,6 +9,7 @@ urlpatterns = [
     path('api-auth/', include('rest_framework.urls')),
     # dj-rest-auth bug fix workaround
     path('dj-rest-auth/logout/', logout_route),
+    path('dj-rest-auth/login/', CustomLoginView.as_view()),
     path('dj-rest-auth/user/', CustomUserDetailsView.as_view()),
     path('dj-rest-auth/', include('dj_rest_auth.urls')),
     # end of dj-rest-auth bug fix workaround
