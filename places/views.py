@@ -1,5 +1,4 @@
 from rest_framework import filters, generics, permissions
-from rest_framework.exceptions import ValidationError
 
 from positive_api.permissions import IsOwnerOrReadOnly
 

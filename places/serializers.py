@@ -10,6 +10,13 @@ class PlaceSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("A place with this name and city already exists.")
         return data
 
+    def save(self, **kwargs):
+        self.instance = super().save(kwargs)
+        user =  self.context['request'].user
+        self.instance.user = user
+        self.instance.save()
+        return self.instance
+
     class Meta:
         model = Place
         fields = '__all__'
