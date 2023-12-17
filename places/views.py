@@ -1,9 +1,13 @@
+import logging
+
 from rest_framework import filters, generics, permissions
 
 from positive_api.permissions import IsOwnerOrReadOnly
 
 from .models import Place
 from .serializers import PlaceSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class PlaceList(generics.ListCreateAPIView):
@@ -16,6 +20,10 @@ class PlaceList(generics.ListCreateAPIView):
     filter_backends = [filters.SearchFilter, filters.OrderingFilter]
     ordering_fields = ["place_name", "city"]
     search_fields = ["place_name", "city"]
+
+    def post(self, request, *args, **kwargs):
+        logger.info("DEBERIA ESTAR EN EL POST DE CREATE LA PORONG AESTA")
+        return super().post(request, *args, **kwargs)
 
 
 class PlaceDetail(generics.RetrieveUpdateDestroyAPIView):
