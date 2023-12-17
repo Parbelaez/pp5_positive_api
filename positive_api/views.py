@@ -1,15 +1,13 @@
 import logging
 from django.contrib.auth import get_user_model
-from django.conf import settings
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from dj_rest_auth.views import UserDetailsView, LoginView
-from dj_rest_auth.utils import jwt_encode, default_create_token
+from dj_rest_auth.utils import jwt_encode
 from dj_rest_auth.jwt_auth import set_jwt_cookies
 from dj_rest_auth.serializers import JWTSerializer
-from rest_framework.authtoken.models import Token
 # dj-rest-auth bug fix workaround
 from .settings import (
     JWT_AUTH_COOKIE, JWT_AUTH_REFRESH_COOKIE, JWT_AUTH_SAMESITE,
@@ -72,14 +70,8 @@ class CustomLoginView(LoginView):
     def login(self):
         self.user = self.serializer.validated_data['user']
         logger.info(f"El usuario es {self.user}")
-        token_model = Token
-
-        if settings.USE_JWT:
-            logger.info("USA JWT")
-            self.access_token, self.refresh_token = jwt_encode(self.user)
-            logger.info(f"El access token es {self.access_token} el refresh es {self.refresh_token}")
-        elif token_model:
-            self.token = default_create_token(token_model, self.user, self.serializer)
+        self.access_token, self.refresh_token = jwt_encode(self.user)
+        logger.info(f"El access token es {self.access_token} el refresh es {self.refresh_token}")
 
     def get_response(self):
 
@@ -88,6 +80,7 @@ class CustomLoginView(LoginView):
             'access': self.access_token,
             'refresh': self.refresh_token
         }
+        logger.info(f"El access token es del tipo {type(self.access_token)}")
         logger.info(f"La data es {data}")
 
         serializer = JWTSerializer(
