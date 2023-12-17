@@ -12,8 +12,8 @@ class PlaceSerializer(serializers.ModelSerializer):
 
     def save(self, **kwargs):
         self.instance = super().save(**kwargs)
-        user =  self.context['request'].user
-        self.instance.user = user
+        owner =  self.context['request'].user
+        self.instance.owner = owner
         self.instance.save()
         return self.instance
 
