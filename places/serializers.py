@@ -11,7 +11,7 @@ class PlaceSerializer(serializers.ModelSerializer):
         return data
 
     def save(self, **kwargs):
-        self.instance = super().save(kwargs)
+        self.instance = super().save(**kwargs)
         user =  self.context['request'].user
         self.instance.user = user
         self.instance.save()
