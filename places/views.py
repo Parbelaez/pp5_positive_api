@@ -23,8 +23,12 @@ class PlaceList(generics.ListCreateAPIView):
     search_fields = ["place_name", "city"]
 
     def post(self, request, *args, **kwargs):
-        logger.info("DEBERIA ESTAR EN EL POST DE CREATE LA PORONG AESTA")
-        return super().post(request, *args, **kwargs)
+        try:
+            logger.info("DEBERIA ESTAR EN EL POST DE CREATE LA PORONG AESTA")
+            return super().post(request, *args, **kwargs)
+        except Exception as e:
+            logger.exception(f"Falla en el post {str(e)}")
+            raise
 
 
 class PlaceDetail(generics.RetrieveUpdateDestroyAPIView):
