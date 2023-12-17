@@ -244,3 +244,5 @@ LOGGING = {
         },
     },
 }
+
+JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED = False
