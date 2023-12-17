@@ -77,8 +77,8 @@ class CustomLoginView(LoginView):
 
         data = {
             'user': self.user,
-            'access': self.access_token,
-            'refresh': self.refresh_token
+            'access_token': self.access_token,
+            'refresh_token': self.refresh_token
         }
         logger.info(f"El access token es del tipo {type(self.access_token)}")
         logger.info(f"La data es {data}")
@@ -90,3 +90,13 @@ class CustomLoginView(LoginView):
         response = Response(serializer.data, status=status.HTTP_200_OK)
         set_jwt_cookies(response, self.access_token, self.refresh_token)
         return response
+
+    def post(self, request):
+        logger.info("Haciendo login en la marculiacion esta")
+        self.request = request
+        self.serializer = self.get_serializer(data=self.request.data)
+        self.serializer.is_valid(raise_exception=True)
+        logger.info("Antes de hacer login")
+        self.login()
+        logger.info(f"El token aqui es {self.access_token} y el tipo es {type(self.access_token)}")
+        return self.get_response()
