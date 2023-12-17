@@ -31,7 +31,7 @@ class Place(models.Model):
     description = models.TextField(blank=True)
     image = models.ImageField(
         upload_to='positive/place_pictures/',
-        default='../default_place_zlhcpb',
+        # default='../default_place_zlhcpb',
         blank=True
         )
     
