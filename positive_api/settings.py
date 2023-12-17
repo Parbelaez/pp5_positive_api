@@ -19,13 +19,11 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+AUTH_CLASS = 'rest_framework.authentication.SessionAuthentication' if 'dev' in os.environ else 'positive_api.permissions.CustomJWTCookieAuthentication'
+
 REST_FRAMEWORK = {
     # JWT in production, Session in development
-    'DEFAULT_AUTHENTICATION_CLASSES': [(
-        'rest_framework.authentication.SessionAuthentication'
-        if 'DEV' in os.environ
-        else 'positive_api.permissions.CustomJWTCookieAuthentication'
-    )],
+    'DEFAULT_AUTHENTICATION_CLASSES': [AUTH_CLASS],
 
     # Pagination
     'DEFAULT_PAGINATION_CLASS':
