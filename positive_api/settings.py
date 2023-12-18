@@ -19,11 +19,13 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-AUTH_CLASS = 'rest_framework.authentication.SessionAuthentication' if 'dev' in os.environ else 'positive_api.permissions.CustomJWTCookieAuthentication'
-
 REST_FRAMEWORK = {
     # JWT in production, Session in development
-    'DEFAULT_AUTHENTICATION_CLASSES': [AUTH_CLASS],
+    'DEFAULT_AUTHENTICATION_CLASSES': [(
+        'rest_framework.authentication.SessionAuthentication'
+        if 'DEV' in os.environ
+        else 'dj_rest_auth.jwt_auth.JWTCookieAuthentication'
+    )],
 
     # Pagination
     'DEFAULT_PAGINATION_CLASS':
@@ -35,15 +37,12 @@ REST_FRAMEWORK = {
 
 # JSON and html renderer only in development
 if 'HTML_REND' not in os.environ:
-    REST_FRAMEWORK = {
-        'DEFAULT_RENDERER_CLASSES': [
+    REST_FRAMEWORK['DEFAULT_RENDERER_CLASSES']: [
             'rest_framework.renderers.JSONRenderer',
         ]
-    }
 
 # JWT
-# REST_USE_JWT = True
-USE_JWT = True
+REST_USE_JWT = True
 JWT_AUTH_SECURE = True
 JWT_AUTH_COOKIE = 'jwt-auth'
 JWT_AUTH_REFRESH_COOKIE = 'jwt-refresh-auth'
@@ -64,16 +63,8 @@ DEBUG = 'DEBUG' in os.environ
 
 ALLOWED_HOSTS = [
     os.environ.get('ALLOWED_HOSTS'),
-    '.gitpod.io',
     'localhost',
-    '127.0.0.1',
     ]
-
-# CSRF_TRUSTED_ORIGINS=[
-#     'http://127.0.0.1:8000',
-#     'https://*.herokuapp.com',
-#     'https://*.gitpod.io',
-# ]
 
 # Application definition
 
@@ -117,7 +108,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    # 'allauth.account.middleware.AccountMiddleware',
 ]
 
 if 'CLIENT_ORIGIN' in os.environ:
@@ -209,7 +199,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -221,26 +211,3 @@ ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_AUTHENTICATION_METHOD = 'username'
 
 ACCOUNT_EMAIL_REQUIRED = False
-
-
-LOGGING = {
-    'version': 1,
-    'disable_existing_loggers': False,
-    'handlers': {
-        'console': {
-            'class': 'logging.StreamHandler',
-        },
-    },
-    'loggers': {
-        '': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        },
-        'django': {
-            'handlers': ['console'],
-            'level': 'INFO',
-        },
-    },
-}
-
-JWT_AUTH_COOKIE_ENFORCE_CSRF_ON_UNAUTHENTICATED = False
